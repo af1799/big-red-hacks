@@ -72,7 +72,11 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Replay") && !AudioRecorder.Instance.isReplaying)
         {
             AudioRecorder.Instance.PlayAudio();
-        } 
+        }
+        if (Input.GetButtonDown("Delete"))
+        {
+            AudioRecorder.Instance.RemoveLastAudio();
+        }
     }
 
     void FixedUpdate()

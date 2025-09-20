@@ -7,7 +7,11 @@ public class AudioRecorder : MonoBehaviour
     public static AudioRecorder Instance { get; private set; }
     public bool isReplaying;
     public AudioSource audioSource;
+    public float clipStartTime = 1f;
+    public float clipDuration = 2f;
     private List<AudioClip> audioClips = new List<AudioClip>();
+    private int listMaxLength = 40;
+    private Coroutine playRoutine;
 
     void Awake()
     {
@@ -22,7 +26,18 @@ public class AudioRecorder : MonoBehaviour
 
     public void AddAudio(AudioClip clip)
     {
-        audioClips.Add(clip);
+        if (audioClips.Count < 40)
+        {
+            audioClips.Add(clip);
+        }
+    }
+
+    public void RemoveLastAudio()
+    {
+        if (audioClips.Count > 0)
+        {
+            audioClips.RemoveAt(audioClips.Count - 1);
+        }
     }
 
     public void PlayAudio()
@@ -32,11 +47,20 @@ public class AudioRecorder : MonoBehaviour
 
     private IEnumerator PlayClipsInSequence()
     {
+        isReplaying = true;
+
         for (int i = 0; i < audioClips.Count; i++)
         {
-            audioSource.clip = audioClips[i];
+            AudioClip clip = audioClips[i];
+            audioSource.clip = clip;
+            audioSource.time = clipStartTime;
             audioSource.Play();
-            yield return new WaitForSeconds(audioClips[i].length);
+
+            yield return new WaitForSeconds(clipDuration);
+
+            audioSource.Stop();
         }
+
+        isReplaying = false;
     }
 }
