@@ -12,6 +12,16 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool isGroundPounding = false;
 
+    public float dashSpeed = 20f;
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 1f;
+
+    private bool isDashing = false;
+    private float dashTimeLeft = 0f;
+    private float lastDashTime = -Mathf.Infinity;
+    private float dashDirection = 0f;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -33,16 +43,33 @@ public class PlayerMovement : MonoBehaviour
         {
             StopGroundPound();
         }
+        if (Input.GetButtonDown("Dash") && !isGroundPounding && !isDashing && Time.time >= lastDashTime + dashCooldown)
+        {
+            StartDash();
+        }
+        if (isDashing)
+        {
+            dashTimeLeft -= Time.deltaTime;
+            if (dashTimeLeft <= 0)
+            {
+                EndDash();
+            }
+        }
+
     }
 
     void FixedUpdate()
     {
         float moveInput = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-        if (!isGroundPounding)
+        if (isDashing)
+        {
+            rb.linearVelocity = new Vector2(dashDirection * dashSpeed, 0);
+        }
+        else if (!isGroundPounding)
         {
             rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
         }
+
     }
 
     void StartGroundPound()
@@ -55,6 +82,22 @@ public class PlayerMovement : MonoBehaviour
     {
         isGroundPounding = false;
         rb.linearVelocity = Vector2.zero;
+    }
+
+    void StartDash()
+    {
+        isDashing = true;
+        dashTimeLeft = dashDuration;
+        lastDashTime = Time.time;
+
+        // Dash direction based on current horizontal input; if zero, dash right by default
+        float moveInput = Input.GetAxisRaw("Horizontal");
+        dashDirection = moveInput != 0 ? Mathf.Sign(moveInput) : 1f;
+    }
+
+    void EndDash()
+    {
+        isDashing = false;
     }
 
 

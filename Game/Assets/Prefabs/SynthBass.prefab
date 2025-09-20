@@ -150,10 +150,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 122e46c780b57451fb310a34e8801f85, type: 3}
+  m_Resource: {fileID: 8300000, guid: f37cf0a1efaf2489197b2e14b03397b6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.8
-  m_Pitch: 2
+  m_Pitch: 1.2
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -249,3 +249,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   audioSource: {fileID: 7282431204757975970}
+  clipStartTime: 1
+  clipDuration: 2
