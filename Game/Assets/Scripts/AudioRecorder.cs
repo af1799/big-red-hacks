@@ -4,8 +4,8 @@ using UnityEngine;
 public class AudioRecorder : MonoBehaviour
 {
     public static AudioRecorder Instance { get; private set; }
-    List<AudioClip> audioClips = new List<AudioClip>();
-    //bool isReplaying
+    public bool isReplaying;
+    private List<AudioClip> audioClips = new List<AudioClip>();
 
     void Awake()
     {
@@ -23,6 +23,10 @@ public class AudioRecorder : MonoBehaviour
         audioClips.Add(clip);
     }
 
+    public void PlayAudio()
+    {
+        
+    }
 
 
 }

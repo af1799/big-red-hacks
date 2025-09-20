@@ -69,7 +69,10 @@ public class PlayerMovement : MonoBehaviour
         {
             SceneController.Instance.LoadSceneByName("Guitar");
         }
-      //  if (Input.GetButtonDown("Replay") && ) 
+        if (Input.GetButtonDown("Replay") && !AudioRecorder.Instance.isReplaying)
+        {
+            AudioRecorder.Instance.PlayAudio();
+        } 
     }
 
     void FixedUpdate()
