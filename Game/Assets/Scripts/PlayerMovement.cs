@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -55,6 +56,18 @@ public class PlayerMovement : MonoBehaviour
             {
                 EndDash();
             }
+        }
+        if (Input.GetButtonDown("Keyboard"))
+        {
+            SceneController.Instance.LoadSceneByName("Keyboard");
+        }
+        if (Input.GetButtonDown("Drums"))
+        {
+            SceneController.Instance.LoadSceneByName("Drums");
+        }
+        if (Input.GetButtonDown("Guitar"))
+        {
+            SceneController.Instance.LoadSceneByName("Guitar");
         }
       //  if (Input.GetButtonDown("Replay") && ) 
     }
