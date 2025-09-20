@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public float groundPoundForce = 20f;
     [SerializeField] public Transform groundCheck;
     [SerializeField] public LayerMask groundLayer;
+    [SerializeField] public Spin spin;
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -84,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Record"))
         {
             AudioRecorder.Instance.Record();
+            spin.SpinRecord();
         }
     }
 
