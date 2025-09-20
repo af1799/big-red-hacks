@@ -31,6 +31,7 @@ public class PlaySound : MonoBehaviour
         if (playRoutine != null)
             StopCoroutine(playRoutine);
         playRoutine = StartCoroutine(PlaySegment());
+        AudioRecorder.Instance.AddAudio(audioSource.clip);
     }
 
     private IEnumerator PlaySegment()
