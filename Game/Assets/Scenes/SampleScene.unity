@@ -453,10 +453,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   moveSpeed: 5
   jumpForce: 10
-  groundCheck: {fileID: 0}
+  groundCheck: {fileID: 1937097220}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!212 &1218402108
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -545,7 +545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
   jumpForce: 10
-  groundCheck: {fileID: 0}
+  groundCheck: {fileID: 1937097220}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
