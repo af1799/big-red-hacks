@@ -81,6 +81,10 @@ public class PlayerMovement : MonoBehaviour
         {
             AudioRecorder.Instance.RemoveLastAudio();
         }
+        if (Input.GetButtonDown("Record"))
+        {
+            AudioRecorder.Instance.Record();
+        }
     }
 
     void FixedUpdate()

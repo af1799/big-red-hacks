@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using NUnit.Framework;
 
 public class AudioRecorder : MonoBehaviour
 {
@@ -9,9 +10,9 @@ public class AudioRecorder : MonoBehaviour
     public AudioSource audioSource;
     public float clipStartTime = 0f;
     public float clipDuration = 2f;
+    public bool isRecording = true;
     private List<AudioClip> audioClips = new List<AudioClip>();
     private int listMaxLength = 20;
-    private Coroutine playRoutine;
 
     void Awake()
     {
@@ -26,7 +27,7 @@ public class AudioRecorder : MonoBehaviour
 
     public void AddAudio(AudioClip clip)
     {
-        if (audioClips.Count < listMaxLength)
+        if (audioClips.Count < listMaxLength && isRecording)
         {
             audioClips.Add(clip);
         }
@@ -62,5 +63,17 @@ public class AudioRecorder : MonoBehaviour
         }
 
         isReplaying = false;
+    }
+
+    public void Record()
+    {
+        if (isRecording)
+        {
+            isRecording = false;
+        }
+        else
+        {
+            isRecording = true;
+        }
     }
 }
