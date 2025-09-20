@@ -1,10 +1,12 @@
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class AudioRecorder : MonoBehaviour
 {
     public static AudioRecorder Instance { get; private set; }
     public bool isReplaying;
+    public AudioSource audioSource;
     private List<AudioClip> audioClips = new List<AudioClip>();
 
     void Awake()
@@ -25,8 +27,16 @@ public class AudioRecorder : MonoBehaviour
 
     public void PlayAudio()
     {
-        
+        StartCoroutine(PlayClipsInSequence());
     }
 
-
+    private IEnumerator PlayClipsInSequence()
+    {
+        for (int i = 0; i < audioClips.Count; i++)
+        {
+            audioSource.clip = audioClips[i];
+            audioSource.Play();
+            yield return new WaitForSeconds(audioClips[i].length);
+        }
+    }
 }
