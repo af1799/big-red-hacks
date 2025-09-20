@@ -1,11 +1,17 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlaySound : MonoBehaviour
 {
     public AudioSource audioSource;
-    
-    private void OnCollisionEnter2D(Collision2D other) {
-        if (other.gameObject.CompareTag("Player")) {
+    public float clipStartTime = 1f;
+    public float clipDuration = 2f;
+    private Coroutine playRoutine;
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
             if (audioSource != null && audioSource.clip != null)
             {
                 audioSource.PlayOneShot(audioSource.clip);
@@ -16,4 +22,20 @@ public class PlaySound : MonoBehaviour
             }
         }
     }
+
+    private void PlayClipSegment()
+    {
+        if (playRoutine != null)
+            StopCoroutine(playRoutine);
+        playRoutine = StartCoroutine(PlaySegment());
+    }
+
+    private IEnumerator PlaySegment()
+    {
+        audioSource.time = clipStartTime;
+        audioSource.Play();
+        yield return new WaitForSeconds(clipDuration);
+        audioSource.Stop();
+    }
+
 }
