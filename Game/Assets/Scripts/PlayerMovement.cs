@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-void FixedUpdate()
+    void FixedUpdate()
     {
         float moveInput = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
