@@ -64,11 +64,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetButtonDown("Drums"))
         {
-            SceneController.Instance.LoadSceneByName("Drums");
-        }
-        if (Input.GetButtonDown("Guitar"))
-        {
-            SceneController.Instance.LoadSceneByName("Guitar");
+            SceneController.Instance.LoadSceneByName("Percussion");
         }
         if (Input.GetButtonDown("Synth"))
         {
