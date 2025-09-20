@@ -12,13 +12,16 @@ public class PlaySound : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (audioSource != null && audioSource.clip != null)
+            if (!audioSource.isPlaying)
             {
-                audioSource.PlayOneShot(audioSource.clip);
-            }
-            else
-            {
-                Debug.LogWarning("AudioSource or AudioClip not assigned to PlayAudioOnTouch script on " + gameObject.name);
+               if (audioSource != null && audioSource.clip != null)
+                {
+                    PlayClipSegment();
+                }
+                else
+                {
+                    Debug.LogWarning("AudioSource or AudioClip not assigned to PlayAudioOnTouch script on " + gameObject.name);
+                } 
             }
         }
     }
