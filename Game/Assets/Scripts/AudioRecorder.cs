@@ -7,10 +7,10 @@ public class AudioRecorder : MonoBehaviour
     public static AudioRecorder Instance { get; private set; }
     public bool isReplaying;
     public AudioSource audioSource;
-    public float clipStartTime = 1f;
+    public float clipStartTime = 0f;
     public float clipDuration = 2f;
     private List<AudioClip> audioClips = new List<AudioClip>();
-    private int listMaxLength = 40;
+    private int listMaxLength = 20;
     private Coroutine playRoutine;
 
     void Awake()
@@ -26,7 +26,7 @@ public class AudioRecorder : MonoBehaviour
 
     public void AddAudio(AudioClip clip)
     {
-        if (audioClips.Count < 40)
+        if (audioClips.Count < listMaxLength)
         {
             audioClips.Add(clip);
         }
