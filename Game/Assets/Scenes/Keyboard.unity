@@ -240,6 +240,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.738633
       objectReference: {fileID: 0}
+    - target: {fileID: 6716766356021842279, guid: 024cc1201a59b449c98709451e639f17, type: 3}
+      propertyPath: type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8212708683308000257, guid: 024cc1201a59b449c98709451e639f17, type: 3}
       propertyPath: m_Resource
       value: 
@@ -310,6 +314,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c003fd153b5945baabc5e2ab1166643, type: 3}
+--- !u!114 &971646386 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8922063530843241804, guid: f41b15eac8ff74034b2e45f23bd1a90f, type: 3}
+  m_PrefabInstance: {fileID: 5773552348789739003}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29d0c54595d54fb28e72b9cfd41d83a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1001 &1068000420
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -358,6 +373,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3849795447057208405, guid: e4146b72e79c547d3831f921bcb897c9, type: 3}
+      propertyPath: spin
+      value: 
+      objectReference: {fileID: 971646386}
     - target: {fileID: 8583440748078225542, guid: e4146b72e79c547d3831f921bcb897c9, type: 3}
       propertyPath: m_Name
       value: Player (1)
@@ -418,6 +437,10 @@ PrefabInstance:
     - target: {fileID: 2938816961726334054, guid: 024cc1201a59b449c98709451e639f17, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716766356021842279, guid: 024cc1201a59b449c98709451e639f17, type: 3}
+      propertyPath: type
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8212708683308000257, guid: 024cc1201a59b449c98709451e639f17, type: 3}
       propertyPath: m_Resource
@@ -633,6 +656,10 @@ PrefabInstance:
     - target: {fileID: 6539793928624638621, guid: 024cc1201a59b449c98709451e639f17, type: 3}
       propertyPath: m_Color.r
       value: 0.738633
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716766356021842279, guid: 024cc1201a59b449c98709451e639f17, type: 3}
+      propertyPath: type
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8212708683308000257, guid: 024cc1201a59b449c98709451e639f17, type: 3}
       propertyPath: m_Resource

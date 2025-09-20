@@ -6,6 +6,7 @@ public class PlaySound : MonoBehaviour
     public AudioSource audioSource;
     public float clipStartTime = 1f;
     public float clipDuration = 2f;
+    [SerializeField] public float type;
     private Coroutine playRoutine;
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -31,7 +32,7 @@ public class PlaySound : MonoBehaviour
         if (playRoutine != null)
             StopCoroutine(playRoutine);
         playRoutine = StartCoroutine(PlaySegment());
-        AudioRecorder.Instance.AddAudio(audioSource.clip);
+        AudioRecorder.Instance.AddAudio(audioSource.clip, type);
     }
 
     private IEnumerator PlaySegment()

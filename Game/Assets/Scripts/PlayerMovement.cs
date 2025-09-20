@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private float dashTimeLeft = 0f;
     private float lastDashTime = -Mathf.Infinity;
     private float dashDirection = 0f;
+    private bool wait = false;
 
 
     void Start()
@@ -32,56 +33,72 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (wait)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-        }
-        if (Input.GetButtonDown("GroundPound") && !isGrounded && !isGroundPounding)
-        {
-            StartGroundPound();
-        }
-        if (isGrounded && isGroundPounding)
-        {
-            StopGroundPound();
-        }
-        if (Input.GetButtonDown("Dash") && !isGroundPounding && !isDashing && Time.time >= lastDashTime + dashCooldown)
-        {
-            StartDash();
-        }
-        if (isDashing)
-        {
-            dashTimeLeft -= Time.deltaTime;
-            if (dashTimeLeft <= 0)
+            if (!AudioRecorder.Instance.isReplaying)
             {
-                EndDash();
+                wait = false;
+                rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
             }
         }
-        if (Input.GetButtonDown("Keyboard"))
+        else
         {
-            SceneController.Instance.LoadSceneByName("Keyboard");
-        }
-        if (Input.GetButtonDown("Drums"))
-        {
-            SceneController.Instance.LoadSceneByName("Percussion");
-        }
-        if (Input.GetButtonDown("Synth"))
-        {
-            SceneController.Instance.LoadSceneByName("Synth");
-        }
-        if (Input.GetButtonDown("Replay") && !AudioRecorder.Instance.isReplaying)
-        {
-            AudioRecorder.Instance.PlayAudio();
-        }
-        if (Input.GetButtonDown("Delete"))
-        {
-            AudioRecorder.Instance.RemoveLastAudio();
-        }
-        if (Input.GetButtonDown("Record"))
-        {
-            AudioRecorder.Instance.Record();
-            spin.SpinRecord();
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+            if (Input.GetButtonDown("Jump") && isGrounded)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            }
+            if (Input.GetButtonDown("GroundPound") && !isGrounded && !isGroundPounding)
+            {
+                StartGroundPound();
+            }
+            if (isGrounded && isGroundPounding)
+            {
+                StopGroundPound();
+            }
+            if (Input.GetButtonDown("Dash") && !isGroundPounding && !isDashing && Time.time >= lastDashTime + dashCooldown)
+            {
+                StartDash();
+            }
+            if (isDashing)
+            {
+                dashTimeLeft -= Time.deltaTime;
+                if (dashTimeLeft <= 0)
+                {
+                    EndDash();
+                }
+            }
+            if (Input.GetButtonDown("Keyboard"))
+            {
+                SceneController.Instance.LoadSceneByName("Keyboard");
+            }
+            if (Input.GetButtonDown("Drums"))
+            {
+                SceneController.Instance.LoadSceneByName("Percussion");
+            }
+            if (Input.GetButtonDown("Synth"))
+            {
+                SceneController.Instance.LoadSceneByName("Synth");
+            }
+            if (Input.GetButtonDown("Replay") && !AudioRecorder.Instance.isReplaying)
+            {
+                if (AudioRecorder.Instance.GetMaxLength().Count != 0)
+                {
+                    wait = true;
+                    rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+                    AudioRecorder.Instance.PlayAudio();
+                    spin.ReverseRecordForSeconds();
+                }
+            }
+            if (Input.GetButtonDown("Delete"))
+            {
+                AudioRecorder.Instance.RemoveLastAudio();
+            }
+            if (Input.GetButtonDown("Record"))
+            {
+                AudioRecorder.Instance.Record();
+                spin.SpinRecord();
+            }
         }
     }
 
