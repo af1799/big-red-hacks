@@ -8,7 +8,6 @@ public class UI2 : MonoBehaviour
 
     private List<GameObject> icons = new List<GameObject>();
     public int length=0;
-
     public void AddOneIcon()
     {
         if (length >= icons.Count)

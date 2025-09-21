@@ -282,9 +282,13 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  spin: {fileID: 0}
   dashSpeed: 20
   dashDuration: 0.2
   dashCooldown: 1
+  pauseMenuUI: {fileID: 0}
+  restartButton: {fileID: 0}
+  quitButton: {fileID: 0}
 --- !u!50 &2511358950793288063
 Rigidbody2D:
   serializedVersion: 5

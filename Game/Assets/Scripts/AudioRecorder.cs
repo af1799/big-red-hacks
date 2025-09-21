@@ -12,14 +12,16 @@ public class AudioRecorder : MonoBehaviour
     public bool isReplaying;
     public AudioSource audioSource1;
     public AudioSource audioSource2;
+    public AudioSource audioSource3;
     public float clipStartTime = 0f;
-    public float maxClipDuration = 2.1f;
+    public float maxClipDuration = 2.0f;
     public UI ui;
     public UI2 ui2;
     public UI3 ui3;
     public bool isRecording = true;
     private List<AudioClip> keyboardClips = new List<AudioClip>();
     private List<AudioClip> percussionClips = new List<AudioClip>();
+    private List<AudioClip> guitarClips = new List<AudioClip>();
     private int listMaxLength = 20;
 
     void Awake()
@@ -51,6 +53,14 @@ public class AudioRecorder : MonoBehaviour
                 ui2.AddOneIcon();
             }
         }
+        else if (type == 3)
+        {
+            if (guitarClips.Count < listMaxLength && isRecording)
+            {
+                guitarClips.Add(clip);
+                ui3.AddOneIcon();
+            }
+        }
     }
 
     public void RemoveLastAudio()
@@ -62,6 +72,7 @@ public class AudioRecorder : MonoBehaviour
             {
                 keyboardClips.RemoveAt(keyboardClips.Count - 1);
                 percussionClips.RemoveAt(percussionClips.Count - 1);
+                guitarClips.RemoveAt(guitarClips.Count - 1);
             }
         }
         else
@@ -72,10 +83,11 @@ public class AudioRecorder : MonoBehaviour
                 if (list.Equals(percussionClips))
                 {
                     ui2.RemoveOneIcon();
-                }
-                if (list.Equals(keyboardClips))
+                } else if (list.Equals(keyboardClips))
                 {
                     ui.RemoveOneIcon();
+                } else if (list.Equals(guitarClips)) {
+                    ui3.RemoveOneIcon();   
                 }
                list.RemoveAt(list.Count - 1); 
             }
@@ -108,11 +120,19 @@ public class AudioRecorder : MonoBehaviour
                 audioSource2.time = clipStartTime;
                 audioSource2.Play();
             }
+            if (i < guitarClips.Count)
+            {
+                AudioClip clip = guitarClips[i];
+                audioSource3.clip = clip;
+                audioSource3.time = clipStartTime;
+                audioSource3.Play();
+            }
 
             yield return new WaitForSeconds(maxClipDuration);
 
             audioSource1.Stop();
             audioSource2.Stop();
+            audioSource3.Stop();
         }
 
         isReplaying = false;
@@ -132,20 +152,25 @@ public class AudioRecorder : MonoBehaviour
 
     public List<AudioClip> GetMaxLength()
     {
-        List<List<AudioClip>> allLists = new List<List<AudioClip>> { keyboardClips, percussionClips };
+        List<List<AudioClip>> allLists = new List<List<AudioClip>> { keyboardClips, percussionClips, guitarClips };
         List<AudioClip> longestList = allLists.OrderByDescending(l => l.Count).First();
         return longestList;
     }
     
-    public List<List<AudioClip>> GetEqualLengthLists()
+   public List<List<AudioClip>> GetEqualLengthLists()
     {
-        if (keyboardClips.Count == percussionClips.Count && keyboardClips.Count > 0)
+        int kCount = keyboardClips.Count;
+        int pCount = percussionClips.Count;
+        int gCount = guitarClips.Count;
+
+        if (kCount == pCount && pCount == gCount && kCount > 0)
         {
-            return new List<List<AudioClip>> { keyboardClips, percussionClips };
+            return new List<List<AudioClip>> { keyboardClips, percussionClips, guitarClips };
         }
 
         return null;
     }
+
 
 
 }

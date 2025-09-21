@@ -904,6 +904,14 @@ PrefabInstance:
       propertyPath: iconContainer
       value: 
       objectReference: {fileID: 5773552348789739006}
+    - target: {fileID: 8842743788506726620, guid: f41b15eac8ff74034b2e45f23bd1a90f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 39.736
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842743788506726620, guid: f41b15eac8ff74034b2e45f23bd1a90f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 51.6458
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
