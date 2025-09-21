@@ -3,6 +3,8 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,19 +16,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public Spin spin;
 
     private Rigidbody2D rb;
-    private bool isGrounded;
+    private Animator anim;
+    private bool isFacingRight = true;
     private bool isGroundPounding = false;
     private bool isPaused = false;
-
     public float dashSpeed = 20f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
-
     private bool isDashing = false;
     private float dashTimeLeft = 0f;
     private float lastDashTime = -Mathf.Infinity;
     private float dashDirection = 0f;
     private bool wait = false;
+    bool isGrounded = false;
+    float moveInput;
 
     private GameObject pauseMenuUI;
     private Button restartButton;
@@ -41,9 +44,11 @@ public class PlayerMovement : MonoBehaviour
         pauseMenuUI.SetActive(false);
     }
 
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         if (restartButton != null)
             restartButton.onClick.AddListener(RestartGame);
 
@@ -70,10 +75,12 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+            // bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
             if (Input.GetButtonDown("Jump") && isGrounded)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                isGrounded = false;
+                anim.SetBool("isJumping", !isGrounded);
             }
             if (Input.GetButtonDown("GroundPound") && !isGrounded && !isGroundPounding)
             {
@@ -115,6 +122,8 @@ public class PlayerMovement : MonoBehaviour
                     rb.constraints = RigidbodyConstraints2D.FreezePositionX;
                     AudioRecorder.Instance.PlayAudio();
                     spin.ReverseRecordForSeconds();
+                    anim.SetBool("isJamming", true);
+                    StartCoroutine(Jamming());
                 }
             }
             if (Input.GetButtonDown("Delete"))
@@ -127,11 +136,20 @@ public class PlayerMovement : MonoBehaviour
                 spin.SpinRecord();
             }
         }
+        
+        moveInput = Input.GetAxis("Horizontal");
+        // print(moveInput);
+        FlipSprite();
+    }
+
+    private IEnumerator Jamming()
+    {
+        yield return new WaitForSeconds(5f);
+        anim.SetBool("isJamming", false);
     }
 
     void FixedUpdate()
     {
-        float moveInput = Input.GetAxis("Horizontal");
         if (isDashing)
         {
             rb.linearVelocity = new Vector2(dashDirection * dashSpeed, 0);
@@ -140,7 +158,18 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
         }
+        anim.SetFloat("xVel", Mathf.Abs(rb.linearVelocity.x));
+        anim.SetFloat("yVel", rb.linearVelocity.y);
     }
+    void FlipSprite()
+    {
+        if (isFacingRight && moveInput < 0f || !isFacingRight && moveInput > 0f)
+            {
+            isFacingRight = !isFacingRight;
+            Vector3 ls = transform.localScale;
+            ls.x *= -1f;
+            transform.localScale = ls;}
+        }
 
     void StartGroundPound()
     {
@@ -203,5 +232,10 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        isGrounded = true;
+        anim.SetBool("isJumping", !isGrounded);
 
+    }
 }
