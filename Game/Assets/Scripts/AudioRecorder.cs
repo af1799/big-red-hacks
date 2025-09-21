@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine.InputSystem;
 using System.Linq;
+using UnityEngine.UIElements;
 
 public class AudioRecorder : MonoBehaviour
 {
@@ -13,12 +14,13 @@ public class AudioRecorder : MonoBehaviour
     public AudioSource audioSource2;
     public float clipStartTime = 0f;
     public float maxClipDuration = 2.1f;
+    public UI ui;
+    public UI2 ui2;
+    public UI3 ui3;
     public bool isRecording = true;
     private List<AudioClip> keyboardClips = new List<AudioClip>();
     private List<AudioClip> percussionClips = new List<AudioClip>();
     private int listMaxLength = 20;
-    private float length1;
-    private float length2;
 
     void Awake()
     {
@@ -38,6 +40,7 @@ public class AudioRecorder : MonoBehaviour
             if (keyboardClips.Count < listMaxLength && isRecording)
             {
                 keyboardClips.Add(clip);
+                ui.AddOneIcon();
             }
         }
         else if (type == 2)
@@ -45,6 +48,7 @@ public class AudioRecorder : MonoBehaviour
             if (percussionClips.Count < listMaxLength && isRecording)
             {
                 percussionClips.Add(clip);
+                ui2.AddOneIcon();
             }
         }
     }
@@ -65,6 +69,14 @@ public class AudioRecorder : MonoBehaviour
             List<AudioClip> list = GetMaxLength();
             if (list.Count != 0)
             {
+                if (list.Equals(percussionClips))
+                {
+                    ui2.RemoveOneIcon();
+                }
+                if (list.Equals(keyboardClips))
+                {
+                    ui.RemoveOneIcon();
+                }
                list.RemoveAt(list.Count - 1); 
             }
         }
