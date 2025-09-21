@@ -28,32 +28,39 @@ public class PlayerMovement : MonoBehaviour
     private float dashDirection = 0f;
     private bool wait = false;
 
-    [SerializeField] private GameObject pauseMenuUI;
-    [SerializeField] private Button restartButton;
-    [SerializeField] private Button quitButton;
+    private GameObject pauseMenuUI;
+    private Button restartButton;
+    private Button quitButton;
+
+    void Awake()
+    {
+        pauseMenuUI = GameObject.Find("PauseMenu");
+        restartButton = pauseMenuUI.transform.Find("RestartButton").GetComponent<Button>();
+        quitButton = pauseMenuUI.transform.Find("QuitButton").GetComponent<Button>();
+
+        pauseMenuUI.SetActive(false);
+    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         if (restartButton != null)
-        {
             restartButton.onClick.AddListener(RestartGame);
-        }
 
         if (quitButton != null)
-        {
             quitButton.onClick.AddListener(QuitGame);
-        }
-        pauseMenuUI.SetActive(false);
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("Pause") || Input.GetButtonDown("Escape"))
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
         }
-        if (wait || isPaused)
+
+        if (isPaused) return;
+        
+        if (wait)
         {
             if (!AudioRecorder.Instance.isReplaying)
             {
@@ -152,23 +159,27 @@ public class PlayerMovement : MonoBehaviour
         isDashing = true;
         dashTimeLeft = dashDuration;
         lastDashTime = Time.time;
+
+        // Dash direction based on current horizontal input; if zero, dash right by default
         float moveInput = Input.GetAxisRaw("Horizontal");
         dashDirection = moveInput != 0 ? Mathf.Sign(moveInput) : 1f;
     }
 
     void TogglePause()
     {
-        if (!isPaused)
+        isPaused = !isPaused;
+
+        if (isPaused)
         {
             Time.timeScale = 0f;
-            pauseMenuUI.gameObject.SetActive(true);
-            isPaused = !isPaused;
+            if (pauseMenuUI != null)
+                pauseMenuUI.SetActive(true);
         }
         else
         {
             Time.timeScale = 1f;
-            pauseMenuUI.gameObject.SetActive(false);
-            isPaused = !isPaused;
+            if (pauseMenuUI != null)
+                pauseMenuUI.SetActive(false);
         }
     }
 
@@ -180,11 +191,11 @@ public class PlayerMovement : MonoBehaviour
 
     void QuitGame()
     {
-        #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-        #else
-                Application.Quit();
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     void EndDash()
