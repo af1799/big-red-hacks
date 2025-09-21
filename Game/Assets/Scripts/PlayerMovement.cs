@@ -1,6 +1,8 @@
 using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded;
     private bool isGroundPounding = false;
+    private bool isPaused = false;
 
     public float dashSpeed = 20f;
     public float dashDuration = 0.2f;
@@ -25,14 +28,38 @@ public class PlayerMovement : MonoBehaviour
     private float dashDirection = 0f;
     private bool wait = false;
 
+    private GameObject pauseMenuUI;
+    private Button restartButton;
+    private Button quitButton;
+
+    void Awake()
+    {
+        pauseMenuUI = GameObject.Find("PauseMenu");
+        restartButton = pauseMenuUI.transform.Find("RestartButton").GetComponent<Button>();
+        quitButton = pauseMenuUI.transform.Find("QuitButton").GetComponent<Button>();
+
+        pauseMenuUI.SetActive(false);
+    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (restartButton != null)
+            restartButton.onClick.AddListener(RestartGame);
+
+        if (quitButton != null)
+            quitButton.onClick.AddListener(QuitGame);
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
+        }
+
+        if (isPaused) return;
+        
         if (wait)
         {
             if (!AudioRecorder.Instance.isReplaying)
@@ -113,7 +140,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
         }
-
     }
 
     void StartGroundPound()
@@ -137,6 +163,39 @@ public class PlayerMovement : MonoBehaviour
         // Dash direction based on current horizontal input; if zero, dash right by default
         float moveInput = Input.GetAxisRaw("Horizontal");
         dashDirection = moveInput != 0 ? Mathf.Sign(moveInput) : 1f;
+    }
+
+    void TogglePause()
+    {
+        isPaused = !isPaused;
+
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
+            if (pauseMenuUI != null)
+                pauseMenuUI.SetActive(true);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            if (pauseMenuUI != null)
+                pauseMenuUI.SetActive(false);
+        }
+    }
+
+    void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     void EndDash()
