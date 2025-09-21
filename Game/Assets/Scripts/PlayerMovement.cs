@@ -31,15 +31,15 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded = false;
     float moveInput;
 
-    private GameObject pauseMenuUI;
-    private Button restartButton;
-    private Button quitButton;
+    [SerializeField] private GameObject pauseMenuUI;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button quitButton;
 
     void Awake()
     {
-        pauseMenuUI = GameObject.Find("PauseMenu");
-        restartButton = pauseMenuUI.transform.Find("RestartButton").GetComponent<Button>();
-        quitButton = pauseMenuUI.transform.Find("QuitButton").GetComponent<Button>();
+       // pauseMenuUI = GameObject.Find("PauseMenu");
+        //restartButton = pauseMenuUI.transform.Find("RestartButton").GetComponent<Button>();
+       // quitButton = pauseMenuUI.transform.Find("QuitButton").GetComponent<Button>();
 
         pauseMenuUI.SetActive(false);
     }
@@ -71,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 wait = false;
                 rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+                anim.SetBool("isJamming", false);
             }
         }
         else
@@ -123,7 +124,6 @@ public class PlayerMovement : MonoBehaviour
                     AudioRecorder.Instance.PlayAudio();
                     spin.ReverseRecordForSeconds();
                     anim.SetBool("isJamming", true);
-                    StartCoroutine(Jamming());
                 }
             }
             if (Input.GetButtonDown("Delete"))
@@ -140,12 +140,6 @@ public class PlayerMovement : MonoBehaviour
         moveInput = Input.GetAxis("Horizontal");
         // print(moveInput);
         FlipSprite();
-    }
-
-    private IEnumerator Jamming()
-    {
-        yield return new WaitForSeconds(5f);
-        anim.SetBool("isJamming", false);
     }
 
     void FixedUpdate()
