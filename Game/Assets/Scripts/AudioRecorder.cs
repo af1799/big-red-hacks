@@ -51,18 +51,22 @@ public class AudioRecorder : MonoBehaviour
 
     public void RemoveLastAudio()
     {
-        if (length1 > length2)
+        List<List<AudioClip>> equalLists = GetEqualLengthLists();
+        if (equalLists != null)
         {
-            keyboardClips.RemoveAt(keyboardClips.Count - 1);
-        }
-        else if (length1 == length2 && keyboardClips.Count != 0)
-        {
-            keyboardClips.RemoveAt(keyboardClips.Count - 1);
-            percussionClips.RemoveAt(percussionClips.Count - 1);
+            if (keyboardClips.Count != 0)
+            {
+                keyboardClips.RemoveAt(keyboardClips.Count - 1);
+                percussionClips.RemoveAt(percussionClips.Count - 1);
+            }
         }
         else
         {
-            percussionClips.RemoveAt(percussionClips.Count - 1);
+            List<AudioClip> list = GetMaxLength();
+            if (list.Count != 0)
+            {
+               list.RemoveAt(list.Count - 1); 
+            }
         }
     }
 
@@ -120,5 +124,16 @@ public class AudioRecorder : MonoBehaviour
         List<AudioClip> longestList = allLists.OrderByDescending(l => l.Count).First();
         return longestList;
     }
+    
+    public List<List<AudioClip>> GetEqualLengthLists()
+    {
+        if (keyboardClips.Count == percussionClips.Count && keyboardClips.Count > 0)
+        {
+            return new List<List<AudioClip>> { keyboardClips, percussionClips };
+        }
+
+        return null;
+    }
+
 
 }
