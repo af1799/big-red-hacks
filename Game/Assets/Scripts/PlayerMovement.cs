@@ -3,6 +3,8 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -113,6 +115,8 @@ public class PlayerMovement : MonoBehaviour
                     rb.constraints = RigidbodyConstraints2D.FreezePositionX;
                     AudioRecorder.Instance.PlayAudio();
                     spin.ReverseRecordForSeconds();
+                    anim.SetBool("isJamming", true);
+                    StartCoroutine(Jamming());
                 }
             }
             if (Input.GetButtonDown("Delete"))
@@ -123,13 +127,18 @@ public class PlayerMovement : MonoBehaviour
             {
                 AudioRecorder.Instance.Record();
                 spin.SpinRecord();
-                anim.SetBool("isJamming", true);
             }
         }
         
         moveInput = Input.GetAxis("Horizontal");
         // print(moveInput);
         FlipSprite();
+    }
+
+    private IEnumerator Jamming()
+    {
+        yield return new WaitForSeconds(5f);
+        anim.SetBool("isJamming", false);
     }
 
     void FixedUpdate()
